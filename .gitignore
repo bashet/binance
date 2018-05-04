@@ -17,3 +17,5 @@ public/images
 composer.lock
 package.lock
 .git
+.phpstorm.meta.php
+_ide_helper.php
