@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use adman9000\binance\BinanceAPI;
 use Illuminate\Http\Request;
+use Larislackers\BinanceApi\BinanceApiContainer;
 
 class HomeController extends Controller
 {
@@ -39,13 +40,22 @@ class HomeController extends Controller
     }
 
     public function get_current_price(Request $request){
-        $base_url = "https://api.binance.com/api";
         $coinPair = $request->optCoinPair;
         $timeInterval = $request->optInterval;
 
-        $link = $base_url . '/v1/klines?symbol='.$coinPair.'&interval='.$timeInterval.'m&limit=20';
+        // Get Kline/candlestick data for a symbol
+        // Periods: 1m,3m,5m,15m,30m,1h,2h,4h,6h,8h,12h,1d,3d,1w,1M
 
-        $records = json_decode(file_get_contents($link), true);
+        $api = new BinanceApiContainer('','');
+
+        $data = $api->getKlines(['symbol' => $coinPair, 'interval' => $timeInterval, 'limit' => 20]);
+        if(! $data){
+            alert()->success('Data not found!')->persistent();
+            flash()->success('Data not found!')->important();
+            return redirect()->back();
+        }
+
+        $records = json_decode($data->getBody()->getContents(), true);
 
         alert()->success('Total Record found: ' . count($records))->persistent();
         flash()->success('Total Record found: ' . count($records))->important();

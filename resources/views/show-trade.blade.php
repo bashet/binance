@@ -22,15 +22,15 @@
         {!! Form::label('', 'Time interval', ['class' => 'col-md-3 control-label text-right']) !!}
         <div class="col-md-7">
             <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" id="customRadioInline5" name="optInterval" value="5" class="custom-control-input">
+                <input type="radio" id="customRadioInline5" name="optInterval" value="5m" class="custom-control-input">
                 <label class="custom-control-label" for="customRadioInline5">5 Minutes</label>
             </div>
             <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" id="customRadioInline15" name="optInterval" value="15" class="custom-control-input">
+                <input type="radio" id="customRadioInline15" name="optInterval" value="15m" class="custom-control-input">
                 <label class="custom-control-label" for="customRadioInline15">15 minutes</label>
             </div>
             <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" id="customRadioInline60" name="optInterval" value="60" class="custom-control-input">
+                <input type="radio" id="customRadioInline60" name="optInterval" value="1h" class="custom-control-input">
                 <label class="custom-control-label" for="customRadioInline60">1 Hour</label>
             </div>
         </div>
