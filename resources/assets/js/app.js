@@ -10,7 +10,7 @@ window.swal = require('sweetalert2');
 require('jquery-validation');
 require('moment');
 require('gasparesganga-jquery-loading-overlay');
-//require('@fortawesome/fontawesome');
+require('jquery-form');
 //require('@fortawesome/fontawesome-free-webfonts');
 
 // window.Vue = require('vue');

@@ -28,4 +28,15 @@ $(function () {
             $('#frm_trade').submit();
         }
     });
+
+    $('#frm_trade').submit(function (e) {
+        e.preventDefault();
+        $('#frm_trade').ajaxSubmit({
+            success: function (result) {
+                $.LoadingOverlay('hide');
+                swal('Total Record found: ' + result.length  + ' Please check browser console!', 'Success', 'success');
+                console.log(result);
+            }
+        });
+    });
 });

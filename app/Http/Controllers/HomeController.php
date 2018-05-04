@@ -57,11 +57,11 @@ class HomeController extends Controller
 
         $records = json_decode($data->getBody()->getContents(), true);
 
-        alert()->success('Total Record found: ' . count($records))->persistent();
-        flash()->success('Total Record found: ' . count($records))->important();
+        //alert()->success('Total Record found: ' . count($records). ' Please check browser console!')->persistent();
+        //flash()->success('Total Record found: ' . count($records). ' Please check browser console!')->important();
 
         //return $records;
 
-        return redirect()->back();
+        return $records;
     }
 }
