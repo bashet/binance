@@ -21,6 +21,10 @@ $(function () {
         }
 
         if( $('#frm_trade').valid() ){
+            $.LoadingOverlay('show',{
+                image       : "",
+                fontawesome : "fas fa-cog fa-spin"
+            });
             $('#frm_trade').submit();
         }
     });
