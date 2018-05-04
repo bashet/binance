@@ -4,6 +4,11 @@
 
 $(function () {
 
+    $('#table_current_market').dataTable({
+        responsive: true,
+        stateSave: true
+    });
+
     $('#btnTradeAction').click(function (e) {
         e.preventDefault();
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use adman9000\binance\BinanceAPI;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -28,7 +29,13 @@ class HomeController extends Controller
 
     public function welcome(){
 
-        return view('welcome');
+        $binance = new BinanceAPI();
+        $markets = $binance->getMarkets();
+
+        $data = array();
+        $data['markets'] = $markets;
+
+        return view('welcome', $data);
     }
 
     public function get_current_price(Request $request){
