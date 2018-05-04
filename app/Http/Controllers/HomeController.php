@@ -32,6 +32,19 @@ class HomeController extends Controller
     }
 
     public function get_current_price(Request $request){
-        return $request->input();
+        $base_url = "https://api.binance.com/api";
+        $coinPair = $request->optCoinPair;
+        $timeInterval = $request->optInterval;
+
+        $link = $base_url . '/v1/klines?symbol='.$coinPair.'&interval='.$timeInterval.'m&limit=20';
+
+        $records = json_decode(file_get_contents($link), true);
+
+        alert()->success('Total Record found: ' . count($records))->persistent();
+        flash()->success('Total Record found: ' . count($records))->important();
+
+        //return $records;
+
+        return redirect()->back();
     }
 }
