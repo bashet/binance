@@ -30,4 +30,8 @@ class HomeController extends Controller
 
         return view('welcome');
     }
+
+    public function get_current_price(Request $request){
+        return $request->input();
+    }
 }

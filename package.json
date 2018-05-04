@@ -20,6 +20,8 @@
         "vue": "^2.5.7"
     },
     "dependencies": {
-        "sweetalert2": "^7.19.3"
+        "sweetalert2": "^7.19.3",
+        "jquery-validation": "^1.17.0",
+        "moment": "^2.22.0"
     }
 }

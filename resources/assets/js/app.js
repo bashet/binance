@@ -7,6 +7,8 @@
 
 require('./bootstrap');
 window.swal = require('sweetalert2');
+require('jquery-validation');
+require('moment');
 
 // window.Vue = require('vue');
 
