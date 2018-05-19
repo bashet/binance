@@ -53,9 +53,6 @@ class HomeController extends Controller
         $coinPair = 'ADAETH';
         $timeInterval = '5m';
 
-        // Get Kline/candlestick data for a symbol
-        // Periods: 1m,3m,5m,15m,30m,1h,2h,4h,6h,8h,12h,1d,3d,1w,1M
-
         $api = new BinanceApiContainer('','');
 
         $data = $api->getKlines(['symbol' => $coinPair, 'interval' => $timeInterval, 'limit' => 1]);
@@ -68,7 +65,7 @@ class HomeController extends Controller
         $records = json_decode($data->getBody()->getContents(), true);
 
 
-        return $records;
+        return $records[0];
     }
 
     public function get_current_price(Request $request){

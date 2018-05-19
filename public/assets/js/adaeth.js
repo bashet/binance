@@ -8,9 +8,8 @@ $(function () {
             datatype: 'JSON',
             data:{}
         }).done(function (result) {
-            var row = result[0];
-            var closing_time = moment.unix(row[6]);
-            $('#scanning').append('Closing time: ' + closing_time.format('DD/MM/YYYY : HH:mm:ss') + '<br>');
+            var closing_time = moment(result[6]);
+            $('#scanning').append(result[4] + ' @ ' + closing_time.format('DD/MM/YYYY : HH:mm:ss') + '<br>');
         });
     }, 5000);
 });
