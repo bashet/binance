@@ -58,7 +58,7 @@ class HomeController extends Controller
 
         $api = new BinanceApiContainer('','');
 
-        $data = $api->getKlines(['symbol' => $coinPair, 'interval' => $timeInterval, 'limit' => 10]);
+        $data = $api->getKlines(['symbol' => $coinPair, 'interval' => $timeInterval, 'limit' => 1]);
         if(! $data){
             alert()->success('Data not found!')->persistent();
             flash()->success('Data not found!')->important();

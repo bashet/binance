@@ -1,8 +1,5 @@
 $(function () {
     setInterval(function() {
-        var msg = 'scanning .....<br>';
-
-        $('#scanning').append(msg);
 
         $.ajax({
             type: "POST",
@@ -11,7 +8,9 @@ $(function () {
             datatype: 'JSON',
             data:{}
         }).done(function (result) {
-
+            var row = result[0];
+            var closing_time = moment.unix(row[6]);
+            $('#scanning').append('Closing time: ' + closing_time.format('DD/MM/YYYY : HH:mm:ss') + '<br>');
         });
     }, 5000);
 });
