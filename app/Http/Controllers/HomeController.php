@@ -43,6 +43,8 @@ class HomeController extends Controller
         return view('welcome', $data);
     }
 
+    public function adaeth(){}
+
     public function get_current_price(Request $request){
         $coinPair = $request->optCoinPair;
         $timeInterval = $request->optInterval;
