@@ -21,6 +21,7 @@ Route::get('registration-done', function (){
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('ADAETH', 'HomeController@adaeth');
+Route::get('adaeth', 'HomeController@adaeth');
+Route::post('adaeth', 'HomeController@get_adaeth');
 
 Route::post('get-current-price', 'HomeController@get_current_price');

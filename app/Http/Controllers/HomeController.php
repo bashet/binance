@@ -43,7 +43,33 @@ class HomeController extends Controller
         return view('welcome', $data);
     }
 
-    public function adaeth(){}
+    public function adaeth(){
+        $data = array();
+
+        return view('adaeth', $data);
+    }
+
+    public function get_adaeth(Request $request){
+        $coinPair = 'ADAETH';
+        $timeInterval = '5m';
+
+        // Get Kline/candlestick data for a symbol
+        // Periods: 1m,3m,5m,15m,30m,1h,2h,4h,6h,8h,12h,1d,3d,1w,1M
+
+        $api = new BinanceApiContainer('','');
+
+        $data = $api->getKlines(['symbol' => $coinPair, 'interval' => $timeInterval, 'limit' => 10]);
+        if(! $data){
+            alert()->success('Data not found!')->persistent();
+            flash()->success('Data not found!')->important();
+            return redirect()->back();
+        }
+
+        $records = json_decode($data->getBody()->getContents(), true);
+
+
+        return $records;
+    }
 
     public function get_current_price(Request $request){
         $coinPair = $request->optCoinPair;
@@ -63,10 +89,6 @@ class HomeController extends Controller
 
         $records = json_decode($data->getBody()->getContents(), true);
 
-        //alert()->success('Total Record found: ' . count($records). ' Please check browser console!')->persistent();
-        //flash()->success('Total Record found: ' . count($records). ' Please check browser console!')->important();
-
-        //return $records;
 
         return $records;
     }
