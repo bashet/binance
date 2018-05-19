@@ -36,6 +36,10 @@ class HomeController extends Controller
         $data = array();
         $data['markets'] = $markets;
 
+
+		alert()->success('Data not found!')->persistent();
+            flash()->success('Data not found!')->important();
+
         return view('welcome', $data);
     }
 
