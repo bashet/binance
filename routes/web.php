@@ -12,6 +12,11 @@
 */
 
 Route::get('/', 'HomeController@welcome');
+Route::get('registration-done', function (){
+    flash()->success('Registration has been successfully completed!');
+    auth()->logout();
+    return redirect('/');
+});
 
 Auth::routes();
 

@@ -5,6 +5,5 @@
 @endpush
 
 @section('content')
-    <i class="fas fa-cog"></i>
     @include('show-trade')
 @endsection
