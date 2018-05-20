@@ -15,7 +15,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
     }
 
     /**
@@ -37,10 +37,35 @@ class HomeController extends Controller
         $data['markets'] = $markets;
 
 
-		alert()->success('Data not found!')->persistent();
-            flash()->success('Data not found!')->important();
+//		alert()->success('Data not found!')->persistent();
+//            flash()->success('Data not found!')->important();
 
         return view('welcome', $data);
+    }
+
+    public function adaeth(){
+        $data = array();
+
+        return view('adaeth', $data);
+    }
+
+    public function get_adaeth(Request $request){
+        $coinPair = 'ADAETH';
+        $timeInterval = '5m';
+
+        $api = new BinanceApiContainer('','');
+
+        $data = $api->getKlines(['symbol' => $coinPair, 'interval' => $timeInterval, 'limit' => 1]);
+        if(! $data){
+            alert()->success('Data not found!')->persistent();
+            flash()->success('Data not found!')->important();
+            return redirect()->back();
+        }
+
+        $records = json_decode($data->getBody()->getContents(), true);
+
+
+        return $records[0];
     }
 
     public function get_current_price(Request $request){
@@ -61,10 +86,6 @@ class HomeController extends Controller
 
         $records = json_decode($data->getBody()->getContents(), true);
 
-        //alert()->success('Total Record found: ' . count($records). ' Please check browser console!')->persistent();
-        //flash()->success('Total Record found: ' . count($records). ' Please check browser console!')->important();
-
-        //return $records;
 
         return $records;
     }

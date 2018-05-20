@@ -38,7 +38,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                        <li class="nav-link"><a href="{{url('adaeth')}}">ADAETH</a> </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -71,7 +71,7 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main class="py-4 container-fluid">
             @include('flash::message')
             @yield('content')
         </main>

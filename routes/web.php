@@ -12,9 +12,16 @@
 */
 
 Route::get('/', 'HomeController@welcome');
+Route::get('registration-done', function (){
+    flash()->success('Registration has been successfully completed!');
+    auth()->logout();
+    return redirect('/');
+});
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('adaeth', 'HomeController@adaeth');
+Route::post('adaeth', 'HomeController@get_adaeth');
 
 Route::post('get-current-price', 'HomeController@get_current_price');

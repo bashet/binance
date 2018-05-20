@@ -8,7 +8,7 @@
 require('./bootstrap');
 window.swal = require('sweetalert2');
 require('jquery-validation');
-require('moment');
+window.moment = require('moment');
 require('gasparesganga-jquery-loading-overlay');
 require('jquery-form');
 //require('@fortawesome/fontawesome-free-webfonts');
