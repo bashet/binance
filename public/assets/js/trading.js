@@ -5,7 +5,7 @@ $(function () {
     var intervalId = null;
     $('#btn_start_scanning').click(function (e) {
         e.preventDefault();
-
+        $('#results').html('');
         $('#btn_start_scanning').prop('disabled', true);
         $('#btn_stop_scanning').prop('disabled', false);
 

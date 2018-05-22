@@ -61,33 +61,38 @@ class TradingController extends Controller
         $ema_12 = 12;
         $ema_26 = 26;
 
-        $first_row = $records->pluck('4');
+        $first_row = collect($records->pluck('4')); // take only closing price and convert them as array
+        $first_row = $first_row->map(function ($item) {
+            return substr($item, -5, 5);
+        });
         $second_row = [];
         $third_row = [];
-        $macd_signals = collect();
+        $macd_signals = collect(); // this method will hold the data as object and will give lot of flexibility to work with.
 
-        $second_row_initial = $records->pluck('4')->take($ema_12)->avg(); // 4 has the closing price
-        $third_row_initial = $records->pluck('4')->take($ema_26)->avg(); // 4 has the closing price
+        $second_row_initial = $first_row->take($ema_12)->avg(); // take fist 12 and average them
+        $third_row_initial = $first_row->take($ema_26)->avg(); // take fist 26 and average them
 
         for ($i = 0; $i < 25; $i++){
             if($i == 0){
-                $second_row [$i] = $second_row_initial;
+                $second_row [$i] = intval($second_row_initial);
             }else{
-                $second_row [$i] = ( $first_row[ ($ema_12 + $i) -1 ] * (2/($ema_12+1)) ) + ( $second_row [ $i - 1 ] * ( 1 - (2/($ema_12+1)) ) );
+                $value = ( $first_row->get(($ema_12 + $i) -1) * (2/($ema_12+1)) ) + ( $second_row [ $i - 1 ] * ( 1 - (2/($ema_12+1)) ) );
+                $second_row [$i] = intval($value);
             }
         }
 
 
         for ($i = 0; $i < 11; $i++){
             if($i == 0){
-                $third_row [$i] = $third_row_initial;
+                $third_row [$i] = intval($third_row_initial);
             }else{
-                $third_row [$i] = ( $first_row[ ($ema_26 + $i) -1 ] * (2/($ema_26+1)) ) + ( $third_row [ $i - 1 ] * ( 1 - (2/($ema_26+1)) ) );
+                $value = ( $first_row->get(($ema_26 + $i) -1) * (2/($ema_26+1)) ) + ( $third_row [ $i - 1 ] * ( 1 - (2/($ema_26+1)) ) );
+                $third_row [$i] = intval($value);
             }
         }
 
         for ($i = 0; $i < 10; $i++){
-            $macd_signals->put($i, $second_row[ 14 + $i ] - $third_row[ $i ]);
+            $macd_signals->put($i, $second_row[ 13 + $i ] - $third_row[ $i ]);
         }
 
         $ema_signal[0] = $macd_signals->take(10)->avg();
