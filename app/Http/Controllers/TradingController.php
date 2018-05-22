@@ -61,13 +61,13 @@ class TradingController extends Controller
         $ema_12 = 12;
         $ema_26 = 26;
 
-        $first_row = $records->pluck('4');
+        $first_row = $records->pluck('4'); // take only closing price and convert them as array
         $second_row = [];
         $third_row = [];
-        $macd_signals = collect();
+        $macd_signals = collect(); // this method will hold the data as object and will give lot of flexibility to work with.
 
-        $second_row_initial = $records->pluck('4')->take($ema_12)->avg(); // 4 has the closing price
-        $third_row_initial = $records->pluck('4')->take($ema_26)->avg(); // 4 has the closing price
+        $second_row_initial = $records->pluck('4')->take($ema_12)->avg(); // take fist 12 and average them
+        $third_row_initial = $records->pluck('4')->take($ema_26)->avg(); // take fist 26 and average them
 
         for ($i = 0; $i < 25; $i++){
             if($i == 0){
