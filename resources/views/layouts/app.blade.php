@@ -38,6 +38,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
+                        <li class="nav-link"><a href="{{url('trading')}}">Trading</a> </li>
                         <li class="nav-link"><a href="{{url('adaeth')}}">ADAETH</a> </li>
                     </ul>
 
