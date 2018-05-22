@@ -5,14 +5,15 @@ $(function () {
 
     }, 5000);
 
-    // $.ajax({
-    //     type: "POST",
-    //     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-    //     url: "/adaeth",
-    //     datatype: 'JSON',
-    //     data: { }
-    // }).done(function processKLineData(result) {
-    // });
+    $.ajax({
+        type: "POST",
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        url: "/adaeth",
+        datatype: 'JSON',
+        data: { }
+    }).done(function (result) {
+        processKLineData(result);
+    });
 });
 
 
