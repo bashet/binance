@@ -104,8 +104,8 @@ class TradingController extends Controller
             '1st_row' => $first_row,
             '2nd_row' => $second_row,
             '3rd_row' => $third_row,
-            'macd' => $macd_signals->last(),
-            'ema' => $ema_signal[1]
+            'macd' => number_format($macd_signals->last(), 2),
+            'ema' => number_format($ema_signal[1], 2)
         ];
     }
 }
