@@ -31,8 +31,8 @@ $(function () {
         $('#frm_trading').ajaxSubmit({
             success: function (result) {
                 var current_time = moment(result.time);
-                var macd = '<span class="text-primary"> MACD: '+ result.signals.macd +'</span>';
-                var ema = '<span class="text-danger"> EMA: '+ result.signals.ema +'</span>';
+                var macd = '<span class="text-primary"> MACD: '+ result.signals.MACD +'</span>';
+                var ema = '<span class="text-danger"> EMA: '+ result.signals.Signal +'</span>';
                 var htnl = '<p>Time: '+ current_time.format('DD/MM/YYYY : HH:mm:ss') + macd + ema +' </p>';
 
 
