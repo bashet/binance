@@ -74,23 +74,25 @@ class TradingController extends Controller
 
         for ($i = 0; $i < 25; $i++){
             if($i == 0){
-                $second_row [$i] = $second_row_initial;
+                $second_row [$i] = intval($second_row_initial);
             }else{
-                $second_row [$i] = ( $first_row[ ($ema_12 + $i) -1 ] * (2/($ema_12+1)) ) + ( $second_row [ $i - 1 ] * ( 1 - (2/($ema_12+1)) ) );
+                $value = ( $first_row->get(($ema_12 + $i) -1) * (2/($ema_12+1)) ) + ( $second_row [ $i - 1 ] * ( 1 - (2/($ema_12+1)) ) );
+                $second_row [$i] = intval($value);
             }
         }
 
 
         for ($i = 0; $i < 11; $i++){
             if($i == 0){
-                $third_row [$i] = $third_row_initial;
+                $third_row [$i] = intval($third_row_initial);
             }else{
-                $third_row [$i] = ( $first_row[ ($ema_26 + $i) -1 ] * (2/($ema_26+1)) ) + ( $third_row [ $i - 1 ] * ( 1 - (2/($ema_26+1)) ) );
+                $value = ( $first_row->get(($ema_26 + $i) -1) * (2/($ema_26+1)) ) + ( $third_row [ $i - 1 ] * ( 1 - (2/($ema_26+1)) ) );
+                $third_row [$i] = intval($value);
             }
         }
 
         for ($i = 0; $i < 10; $i++){
-            $macd_signals->put($i, $second_row[ 14 + $i ] - $third_row[ $i ]);
+            $macd_signals->put($i, $second_row[ 13 + $i ] - $third_row[ $i ]);
         }
 
         $ema_signal[0] = $macd_signals->take(10)->avg();
