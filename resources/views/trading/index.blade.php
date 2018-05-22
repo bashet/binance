@@ -12,7 +12,7 @@
                 <h3 class="card-title">Observe Coin</h3>
             </div>
             <div class="card-block pt-2">
-                {!! Form::open(['id' => 'frm_trading', 'url' => url('start-scanning'), 'class' => '']) !!}
+                {!! Form::open(['id' => 'frm_trading', 'url' => url('scanning'), 'class' => '']) !!}
                 <div class="form-group row">
                     {!! Form::label('coin', 'Coin', ['class' => 'col-md-3 control-label text-right']) !!}
                     <div class="col-md-7">

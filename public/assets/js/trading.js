@@ -5,8 +5,10 @@ $(function () {
     $('#btn_start_scanning').click(function (e) {
         e.preventDefault();
 
+        setInterval(function () {
+            $('#frm_trading').submit();
+        }, 5000);
 
-        $('#frm_trading').submit();
     });
 
     $('#frm_trading').submit(function (e) {

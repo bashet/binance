@@ -22,7 +22,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('trading', 'TradingController@index')->name('trading');
-Route::post('start-scanning', 'TradingController@start_scanning');
+Route::post('scanning', 'TradingController@start_scanning');
 Route::get('adaeth', 'HomeController@adaeth');
 Route::post('adaeth', 'HomeController@get_adaeth');
 
