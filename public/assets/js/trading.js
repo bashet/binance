@@ -4,10 +4,7 @@
 $(function () {
     $('#btn_start_scanning').click(function (e) {
         e.preventDefault();
-        $.LoadingOverlay('show', {
-            image       : "",
-            fontawesome : "fas fa-cog fa-spin"
-        });
+
 
         $('#frm_trading').submit();
     });
@@ -17,8 +14,16 @@ $(function () {
 
         $('#frm_trading').ajaxSubmit({
             success: function (result) {
+                var current_time = moment(result.time);
+                var macd = '<span class="text-primary"> MACD: '+ result.signals.macd +'</span>';
+                var ema = '<span class="text-danger"> EMA: '+ result.signals.ema +'</span>';
+                var htnl = '<p>Time: '+ current_time.format('DD/MM/YYYY : HH:mm:ss') + macd + ema +' </p>';
 
-                $.LoadingOverlay('hide');
+
+                $('#result_container').show();
+
+                $('#results').prepend(htnl);
+
                 console.log(result);
             }
         });

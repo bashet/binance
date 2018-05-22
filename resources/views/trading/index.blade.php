@@ -37,4 +37,15 @@
             </div>
         </section>
     </div>
+
+    <div id="result_container" class="container" style="display: none">
+        <section class="card col-xs-12">
+            <div class="card-header">
+                <h3 class="card-title">Result</h3>
+            </div>
+            <div id="results" class="card-block pt-2">
+
+            </div>
+        </section>
+    </div>
 @endsection
