@@ -31,7 +31,8 @@
                 <div class="form-group row">
                     {!! Form::label('', '', ['class' => 'col-md-3 control-label text-right']) !!}
                     <div class="col-md-7">
-                        <button id="btn_start_scanning" class="btn btn-primary">Start Scanning...</button>
+                        <button id="btn_start_scanning" class="btn btn-primary"><i class="fas fa-play"></i> Start</button>
+                        <button id="btn_stop_scanning" disabled class="btn btn-primary"><i class="fas fa-stop"></i> Stop</button>
                     </div>
                 </div>
             </div>
