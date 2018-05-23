@@ -17,6 +17,14 @@ $(function () {
 
     $('#btn_stop_scanning').click(function (e) {
         e.preventDefault();
+        //### Clear all session variables; Clear the Session Variables from Server Side!
+        $.ajax({
+            type: "POST",
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            url: "/clear_session",
+            datatype: 'JSON',
+            data: { }
+        }).done(function (result) {});
 
         $('#btn_stop_scanning').prop('disabled', true);
         $('#btn_start_scanning').prop('disabled', false);
@@ -24,6 +32,12 @@ $(function () {
         if (intervalId)
             clearInterval(intervalId);
     });
+
+    $('#btn_clear_table').click(function (e) {
+        e.preventDefault();
+        $("#SignalDataTable tbody").empty();
+    });
+
 
     $('#frm_trading').submit(function (e) {
         e.preventDefault();

@@ -14,6 +14,15 @@ class TradingController extends Controller
     public $ema_12 = 12;
     public $ema_26 = 26;
 
+    public function clear_session(Request $request){
+        //### Actually reset the value... Same as clearing up!!
+        $request->session()->forget('firstTime');
+
+        session(['firstTime' => 'true']); //### Now Toggle the value... We have loaded the Initial Batch.. So- set to False
+        $firstTime = session('firstTime', 'true'); //## + '; Value is Reset now'
+        return ['IsFirstCall'=>  $firstTime];
+    }
+
     public function index(){
         $data = array();
 
@@ -36,11 +45,11 @@ class TradingController extends Controller
 
     public function start_scanning(Request $request){
 
-//        Get_Stoch_MACD_ParamValues($request); //## This will fetch all Param Values for both Stochastic and MACD indicators
+        $this->Get_Stoch_MACD_ParamValues($request); //## This will fetch all Param Values for both Stochastic and MACD indicators
         $api = new BinanceApiContainer('','');
 
         $isLoadingFirstTime = session('firstTime', 'true');
-        if($isLoadingFirstTime==1)
+        if($isLoadingFirstTime=='true')
         {
             session(['firstTime' => 'false']); //### Now Toggle the value... We have loaded the Initial Batch.. So- set to False
             $isLoadingFirstTime = 'false';
@@ -57,63 +66,60 @@ class TradingController extends Controller
 
         $records = json_decode($data->getBody()->getContents(), true);
 
-// TO DO:        return ['time' => $records[0][6], 'closingPrice' => $records[0][4], 'signals' => $this->get_signals(collect($records), '123')]
         if($isLoadingFirstTime=='true') {
-            return ['time' => $records[0][6], 'closingPrice' => $records[0][4], 'signals' => $this->get_signals(collect($records), $request->coin)];
+            return ['time' => $records[0][6], 'closingPrice' => $records[0][4], 'IsFirstCall'=> $isLoadingFirstTime, 'signals' => $this->get_signals(collect($records), $request->coin)];
         }
         else {
-            return ['time' => $records[0][6], 'closingPrice' => $records[0][4], 'signals' => $this->get_signals(collect($records), $request->coin)];
-            //return ['time' => $records[0][6], 'closingPrice' => $records[0][4], 'signals' => $this->CalculateCurrentEMA($records[0][4])];
-            /*
+            //return ['time' => $records[0][6], 'closingPrice' => $records[0][4], 'signals' => $this->get_signals(collect($records), $request->coin)];
+            return ['time' => $records[0][6], 'closingPrice' => $records[0][4], 'IsFirstCall'=> $isLoadingFirstTime, 'signals' => $this->CalculateCurrentEMA($records[0][4])];
+/*
             return ['time' => $records[0][6], 'coinPair' => 'ADAETH',
                 'MACD' => 'Y',
                 'Stoch' => '',
                 'OrderType' => 'X',
-                'Price' => $records[0][4],
+                'closingPrice' => $records[0][4],
                 'Profit' => '', 'Margin' => '0',
                 'signals' => $this->CalculateCurrentEMA($records[0][4])];
-            */
+*/
         }
 
 
     }
 
     //### My Global Variables Data feeding.
-    function Get_Stoch_MACD_ParamValues(Request $request)
+    public function Get_Stoch_MACD_ParamValues(Request $request)
     {
-        //public $ema_9  = $request->macdSignalLineInputBox;
+        $this->ema_9  = $request->macdSignalLineInputBox;
         $this->ema_12 = $request->macdFastLineInputBox;
-        //public $ema_26 = $request->macdSlowLineInputBox;
+        $this->ema_26 = $request->macdSlowLineInputBox;
     }
 
-    public function get_signals(Collection $records, $tradeCoin){ // TO DO: Add this second parameter
-
-        $ema_9 = 9;
-        $ema_12 = 12;
-        $ema_26 = 26;
-
+    public function get_signals(Collection $records, $tradeCoin)
+    {
+        // ADA, TRX, XVG-> Needs formatting. remove the preceeding Decimal Point
+        // ETHUSDT, BTCUSTD, LTCUSDT->> Need full Price, ie: $10502.22
         $price_column = collect($records->pluck('4')); // take only closing price and convert them as array
-        $price_column = $price_column->map(function ($item) {
-            // TO DO: Price will be formatted according to the Price!
-            /*if($tradeCoin=='ETH' || $tradeCoin =='BTC') //### When trading with ETHUSDT or BTCUSDT- we need the whole value- not Part or anything after trimming!
-            {return $item;}
-            else{return substr($item, -8, 8);}*/
-            return substr($item, -8, 8);
-        });
+        // Price will be formatted according to the Price!
+        if(!($tradeCoin=='ETH' || $tradeCoin =='BTC')) { //### When trading with ETHUSDT or BTCUSDT- we need the whole value- not Part or anything after trimming!
+            $price_column = $price_column->map(function ($item) {
+                return substr($item, 2, 8);
+            });
+        }
+
         $ema12_column = [];
         $ema26_column = [];
         $macd_line = collect(); // this method will hold the data as object and will give lot of flexibility to work with.
 
         $second_col_initial = $price_column->take($this->ema_12)->avg(); // take fist 12 and average them
-        $third_col_initial = $price_column->take($ema_26)->avg(); // take fist 26 and average them
+        $third_col_initial = $price_column->take($this->ema_26)->avg(); // take fist 26 and average them
 
         //#### Now build the 12-EMA Values
-        for ($i = 0; $i < $ema_26-1; $i++){
+        for ($i = 0; $i < $this->ema_26-1; $i++){
             if($i == 0){
                 $ema12_column [$i] = intval($second_col_initial);
             }else{
-                $value = ( $price_column->get(($this->ema_12 + $i) -1) * (2/($this->ema_12+1)) ) + ( $ema12_column [ $i - 1 ] * ( 1 - (2/($this->ema_12+1)) ) );
-                //$value = $this->GetEMA_Value($ema12_column [ $i - 1 ], $price_column->get(($this->ema_12 + $i) -1), $this->ema_12);
+                //$value = ( $price_column->get(($this->ema_12 + $i) -1) * (2/($this->ema_12+1)) ) + ( $ema12_column [ $i - 1 ] * ( 1 - (2/($this->ema_12+1)) ) );
+                $value = $this->GetEMA_Value(($price_column->get(($this->ema_12 + $i) -1)), $ema12_column [ $i - 1 ], $this->ema_12);
                 $ema12_column [$i] = intval($value);
             }
         }
@@ -124,38 +130,30 @@ class TradingController extends Controller
             if($i == 0){
                 $ema26_column [$i] = intval($third_col_initial);
             }else{
-                $value = ( $price_column->get(($ema_26 + $i) -1) * (2/($ema_26+1)) ) + ( $ema26_column [ $i - 1 ] * ( 1 - (2/($ema_26+1)) ) );
+                //$value = ( $price_column->get(($this->ema_26 + $i) -1) * (2/($this->ema_26+1)) ) + ( $ema26_column [ $i - 1 ] * ( 1 - (2/($this->ema_26+1)) ) );
+                $value = $this->GetEMA_Value($price_column->get(($this->ema_26 + $i) -1), ($ema26_column [ $i - 1 ]), $this->ema_26);
 
                 $ema26_column [$i] = intval($value);
             }
         }
 
         //### MACD Line- ( Fast Line Minus Slow Line, ie: 12 - 26 EMA)
-        for ($i = 0; $i < $ema_9; $i++){
-            $macd_line->put($i, $ema12_column[ $ema_26-$this->ema_12 + $i] - $ema26_column[ $i ]);
+        for ($i = 0; $i < $this->ema_9; $i++){
+            $macd_line->put($i, $ema12_column[ $this->ema_26-$this->ema_12 + $i] - $ema26_column[ $i ]);
         }
 
-        $ema_signal[0] = $macd_line->take($ema_9)->avg();
+        $ema_signal[0] = $macd_line->take($this->ema_9)->avg();
 
         //### Calculation Ends here.. Subsequent Calculation will be done on every 5 Secs interval
        // $ema_signal[1] = ( $macd_line->last() * (2/($ema_9+1)) ) + ( $ema_signal[0] * ( 1 - (2/($ema_9+1)) ) );
 
 
         //### Now all done! So, store the currently Read values for the subsequent calls.. When we get next request to return MACD+Signal values- we can use the previous MACD and SIgnal Values to aclculate the New ones
-        /* // TO DO: Store the values in the SESSION variables
-        $lastEMA12_Val = $ema12_column->last();
-        $lastEMA26_Val = $ema26_column->last();
-        $lastEMA9_Val = $ema_signal[0];
+         // ### Store the values in the SESSION variables
+        session(['previous_FastLine_EMA' => $ema12_column[22] ]);
+        session(['previous_SlowLine_EMA' => $ema26_column[$this->ema_9-1] ]);
+        session(['previous_SignalLineEMA' => $ema_signal[0] ]);
 
-        session::set('previous_FastLine_EMA',$lastEMA12_Val);
-        session::set('previous_SlowLine_EMA',$lastEMA26_Val);
-        session::set('previous_SignalLineEMA',$lastEMA9_Val);
-        */
-/*
-        session(['previous_FastLine_EMA' => $lastEMA12_Val]);// $ema12_column->last() ]);
-        session(['previous_SlowLine_EMA' => $lastEMA26_Val]);// $ema26_column->last() ]);
-        session(['previous_SignalLineEMA' => $lastEMA9_Val]);// $ema_signal[0] ]);
-*/
         //### Now return the total Result
         return [
             'Price' => $price_column,
@@ -174,11 +172,11 @@ class TradingController extends Controller
         $previous_SignalLineEMA = session('previous_SignalLineEMA', 0); //### 9 EMA
 
         //### We need only Current Price to Calculate New EMA, Because we already have previous EMAs
-        $newFastLine = $this->GetEMA_Value($currentClosing, $previous_FastLine_EMA, $this->macd_FastLengthPeriod);
-        $newSlowLine = $this->GetEMA_Value($currentClosing, $previous_SlowLine_EMA, $this->macd_SlowlengthPeriod);
+        $newFastLine = $this->GetEMA_Value($currentClosing, $previous_FastLine_EMA, $this->ema_12);
+        $newSlowLine = $this->GetEMA_Value($currentClosing, $previous_SlowLine_EMA, $this->ema_26);
 
         $newMACD_Line = $newFastLine - $newSlowLine;
-        $newSignalLine_EMA = $this->GetEMA_Value($currentClosing, $previous_SignalLineEMA, $this->macd_SlowlengthPeriod);
+        $newSignalLine_EMA = $this->GetEMA_Value($newMACD_Line, $previous_SignalLineEMA, $this->ema_9);
 
         //### Now return the total Result
         return [

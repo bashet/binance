@@ -9,7 +9,10 @@
     <div class="container">
         <section class="card col-xs-12">
             <div class="card-header">
-                <h3 class="card-title">Trading Indicator signal</h3>
+                <h3 class="card-title">Trading Indicator signal <i class="fa fa-btc" aria-hidden="true"></i>
+                    <i class="fa fa-eth" aria-hidden="true"></i></h3>
+
+
             </div>
             <div class="card-block pt-2">
                 {!! Form::open(['id' => 'frm_trading', 'url' => url('scanning'), 'class' => '']) !!}
@@ -66,6 +69,7 @@
                     <div class="col-md-7">
                         <button id="btn_start_scanning" class="btn btn-primary"><i class="fas fa-play"></i> Start</button>
                         <button id="btn_stop_scanning" disabled class="btn btn-primary"><i class="fas fa-stop"></i> Stop</button>
+                        <button id="btn_clear_table" class="btn btn-warning"><i class="fas fa-window-close"></i> Clear</button>
                     </div>
                 </div>
             </div>
@@ -80,7 +84,8 @@
 
             <div>
                 <div class="card-header">
-                    <h5 class="card-title">Auto trade signal</h5>
+                    <h5 class="card-title">Auto trade signal <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                    </h5>
                 </div>
                 <table id="AutoSignalDataTable" class="table table-condensed col-md-12">
                     <thead>
@@ -102,14 +107,17 @@
 
             <div>
                 <div class="card-header">
-                    <h5 class="card-title">MACD Signal data</h5>
+                    <h5 class="card-title">MACD Signal data
+                        <i class="fa fa-line-chart" aria-hidden="true"></i>
+                    </h5>
                 </div>
-                <table id="SignalDataTable" class="table table-condensed col-md-12">
+                {{--<table id="SignalDataTable" class="table table-condensed col-md-12">--}}
+                <table id="SignalDataTable" class="col-md-12">
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Time</th>
-                        <th>Closing Price</th>
+                        <th>Time <i class="fa fa-line-chart" aria-hidden="true"></i></th>
+                        <th>Closing Price<i class="fa fa-money" aria-hidden="true"></i></th>
                         <th>MACD</th>
                         <th>Signal</th>
                     </tr>
