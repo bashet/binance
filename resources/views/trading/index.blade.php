@@ -9,22 +9,55 @@
     <div class="container">
         <section class="card col-xs-12">
             <div class="card-header">
-                <h3 class="card-title">Observe Coin</h3>
+                <h3 class="card-title">Trading Indicator signal</h3>
             </div>
             <div class="card-block pt-2">
                 {!! Form::open(['id' => 'frm_trading', 'url' => url('scanning'), 'class' => '']) !!}
                 <div class="form-group row">
-                    {!! Form::label('coin', 'Coin', ['class' => 'col-md-3 control-label text-right']) !!}
+                    {!! Form::label('coin', 'Coin Settings', ['class' => 'col-md-3 control-label text-right']) !!}
                     <div class="col-md-7">
-                        {!! Form::select('coin', $coins, '', ['class' => 'form-control']) !!}
+                        {!! Form::select('coin', $coins, '', ['class' => 'col-md-3']) !!} &nbsp;
+                        {{--{!! Form::radio('$coinPairs', 1, '') !!} &nbsp;--}}
+                        {!! Form::select('coinPairs', $coinPairs, '', ['class' => 'col-md-3']) !!} &nbsp;
+                        {!! Form::select('interval', $intervals, '5m', ['class' => 'col-md-3']) !!}
+
+{{--                        {!! Form::select('coin', $coins, '', ['class' => 'form-control']) !!} &nbsp;
+                        {!! Form::select('coinPairs', $coinPairs, '', ['class' => 'form-control']) !!} &nbsp;
+                        {!! Form::select('interval', $intervals, '5m', ['class' => 'form-control']) !!}--}}
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    {!! Form::label('macd', 'MACD Settings', ['class' => 'col-md-3 control-label text-right']) !!}
+                    <div class="col-md-7">
+                        <input name="macdFastLineInputBox" value="12" /> &nbsp;
+                        <input name="macdSlowLineInputBox" value="26" /> &nbsp;
+                        <input name="macdSignalLineInputBox" value="9" />
+
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    {!! Form::label('stoch', 'Stochastic Settings', ['class' => 'col-md-3 control-label text-right']) !!}
+                    <div class="col-md-7">
+                        <input name="stochK" value="14" /> &nbsp;
+                        <input name="stochD" value="6" /> &nbsp;
+                        <input name="stochSmoothing" value="6" />
+
+                    </div>
+                </div>
+{{--                <div class="form-group row">
+                    {!! Form::label('coinPairs', 'Pair', ['class' => 'col-md-3 control-label text-right']) !!}
+                    <div class="col-md-7">
+
                     </div>
                 </div>
                 <div class="form-group row">
                     {!! Form::label('interval', 'Interval', ['class' => 'col-md-3 control-label text-right']) !!}
                     <div class="col-md-7">
-                        {!! Form::select('interval', $intervals, '5m', ['class' => 'form-control']) !!}
+
                     </div>
-                </div>
+                </div>--}}
                 {!! Form::close() !!}
             </div>
             <div class="card-footer">
@@ -39,14 +72,53 @@
         </section>
     </div>
 
-    <div id="result_container" class="container" style="display: none">
+    <div id="result_container" class="container">
         <section class="card col-xs-12">
-            <div class="card-header">
-                <h3 class="card-title">Result</h3>
-            </div>
             <div id="results" class="card-block pt-2">
 
             </div>
+
+            <div>
+                <div class="card-header">
+                    <h5 class="card-title">Auto trade signal</h5>
+                </div>
+                <table id="AutoSignalDataTable" class="table table-condensed col-md-12">
+                    <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>CoinPair</th>
+                        <th>MACD</th>
+                        <th>Stoch</th>
+                        <th>OrderType</th>
+                        <th>Price</th>
+                        <th>Profit</th>
+                        <th>Margin</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
+            <div>
+                <div class="card-header">
+                    <h5 class="card-title">MACD Signal data</h5>
+                </div>
+                <table id="SignalDataTable" class="table table-condensed col-md-12">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Time</th>
+                        <th>Closing Price</th>
+                        <th>MACD</th>
+                        <th>Signal</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
         </section>
     </div>
 @endsection
