@@ -59,10 +59,10 @@ class TradingController extends Controller
 
 // TO DO:        return ['time' => $records[0][6], 'closingPrice' => $records[0][4], 'signals' => $this->get_signals(collect($records), '123')]
         if($isLoadingFirstTime=='true') {
-            return ['time' => $records[0][6], 'closingPrice' => $records[0][4], 'signals' => $this->get_signals(collect($records))];
+            return ['time' => $records[0][6], 'closingPrice' => $records[0][4], 'signals' => $this->get_signals(collect($records), $request->coin)];
         }
         else {
-            return ['time' => $records[0][6], 'closingPrice' => $records[0][4], 'signals' => $this->get_signals(collect($records))];
+            return ['time' => $records[0][6], 'closingPrice' => $records[0][4], 'signals' => $this->get_signals(collect($records), $request->coin)];
             //return ['time' => $records[0][6], 'closingPrice' => $records[0][4], 'signals' => $this->CalculateCurrentEMA($records[0][4])];
             /*
             return ['time' => $records[0][6], 'coinPair' => 'ADAETH',
@@ -86,8 +86,8 @@ class TradingController extends Controller
         //public $ema_26 = $request->macdSlowLineInputBox;
     }
 
-//    public function get_signals(Collection $records, tradeCoin $tradeCoin){ // TO DO: Add this second parameter
-    public function get_signals(Collection $records){
+    public function get_signals(Collection $records, $tradeCoin){ // TO DO: Add this second parameter
+
         $ema_9 = 9;
         $ema_12 = 12;
         $ema_26 = 26;
