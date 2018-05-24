@@ -9,7 +9,7 @@
     <div class="container">
         <section class="card col-xs-12">
             <div class="card-header">
-                <h3 class="card-title">Trading Indicator signal <i class="fas fa-btc" aria-hidden="true"></i>
+                <h3 class="card-title">Trading Indicator signal <i class="fab fa-btc" aria-hidden="true"></i>
                     <i class="fab fa-ethereum" aria-hidden="true"></i></h3>
 
 
@@ -18,35 +18,35 @@
                 {!! Form::open(['id' => 'frm_trading', 'url' => url('scanning'), 'class' => '']) !!}
                 <div class="form-group row">
                     {!! Form::label('coin', 'Coin Settings', ['class' => 'col-md-3 control-label text-right']) !!}
-                    <div class="col-md-7">
-                        {!! Form::select('coin', $coins, '', ['class' => 'col-md-3']) !!} &nbsp;
-                        {{--{!! Form::radio('$coinPairs', 1, '') !!} &nbsp;--}}
-                        {!! Form::select('coinPairs', $coinPairs, '', ['class' => 'col-md-3']) !!} &nbsp;
-                        {!! Form::select('interval', $intervals, '5m', ['class' => 'col-md-3']) !!}
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col">{!! Form::select('coin', $coins, '', ['class' => 'form-control text-center']) !!}</div>
+                            <div class="col">{!! Form::select('coinPairs', $coinPairs, '', ['class' => 'form-control text-center']) !!}</div>
+                            <div class="col">{!! Form::select('interval', $intervals, '5m', ['class' => 'form-control text-center']) !!}</div>
+                        </div>
 
-{{--                        {!! Form::select('coin', $coins, '', ['class' => 'form-control']) !!} &nbsp;
-                        {!! Form::select('coinPairs', $coinPairs, '', ['class' => 'form-control']) !!} &nbsp;
-                        {!! Form::select('interval', $intervals, '5m', ['class' => 'form-control']) !!}--}}
                     </div>
                 </div>
 
                 <div class="form-group row">
                     {!! Form::label('macd', 'MACD Settings', ['class' => 'col-md-3 control-label text-right']) !!}
-                    <div class="col-md-7">
-                        <input name="macdFastLineInputBox" value="12" /> &nbsp;
-                        <input name="macdSlowLineInputBox" value="26" /> &nbsp;
-                        <input name="macdSignalLineInputBox" value="9" />
-
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col">{!! Form::text('macdFastLineInputBox', '12', ['id' => 'macdFastLineInputBox', 'class' => 'form-control']) !!}</div>
+                            <div class="col">{!! Form::text('macdSlowLineInputBox', '26', ['class' => 'form-control']) !!}</div>
+                            <div class="col">{!! Form::text('macdSignalLineInputBox', '9', ['class' => 'form-control']) !!}</div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     {!! Form::label('stoch', 'Stochastic Settings', ['class' => 'col-md-3 control-label text-right']) !!}
-                    <div class="col-md-7">
-                        <input name="stochK" value="14" /> &nbsp;
-                        <input name="stochD" value="6" /> &nbsp;
-                        <input name="stochSmoothing" value="6" />
-
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col">{!! Form::text('stochK', '14', ['id' => 'stochK', 'class' => 'form-control']) !!}</div>
+                            <div class="col">{!! Form::text('stochD', '6', ['class' => 'form-control']) !!}</div>
+                            <div class="col">{!! Form::text('stochSmoothing', '6', ['class' => 'form-control']) !!}</div>
+                        </div>
                     </div>
                 </div>
 {{--                <div class="form-group row">

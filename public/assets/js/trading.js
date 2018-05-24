@@ -77,7 +77,7 @@ $(function () {
 */
 
                 rowCounter++;
-                $('#SignalDataTable').first().append("<tr class='"+ rowStyle + "'><td>" + rowCounter + "</td>" +
+                $('#SignalDataTable').prepend("<tr class='"+ rowStyle + "'><td>" + rowCounter + "</td>" +
                                                         "<td>" + tradeTime + "</td>" +
                                                         "<td>" + result.closingPrice + "</td>" +
                                                         "<td>" + result.signals.MACD + "</td>" +

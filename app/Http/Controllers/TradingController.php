@@ -20,12 +20,15 @@ class TradingController extends Controller
         $request->session()->forget('orderType');
 
         session(['orderType' => 'null']);
-        session(['firstTime' => 'true']); //### Now Toggle the value... We have loaded the Initial Batch.. So- set to False
-        $firstTime = session('firstTime', 'true'); //## + '; Value is Reset now'
+        session(['firstTime' => 1]); //### Now Toggle the value... We have loaded the Initial Batch.. So- set to False
+        $firstTime = session('firstTime', 1); //## + '; Value is Reset now'
         return ['IsFirstCall'=>  $firstTime];
     }
 
     public function index(){
+
+       // return session()->all();
+
         $data = array();
 
         //$coins = ['ADAETH' => 'ADAETH', 'BNBETH' => 'BNBETH', 'FUNETH'=>'FUNETH', 'TRXETH' => 'TRXETH', 'ETHUSDT' => 'ETHUSDT', 'BTCUSDT'=> 'BTCUSDT'];
@@ -50,15 +53,16 @@ class TradingController extends Controller
         $this->Get_Stoch_MACD_ParamValues($request); //## This will fetch all Param Values for both Stochastic and MACD indicators
         $api = new BinanceApiContainer('','');
 
-        $isLoadingFirstTime = session('firstTime', 'true');
-        if($isLoadingFirstTime=='true')
+        $isLoadingFirstTime = session('firstTime', 1);
+        $dataLimitMACD = ($isLoadingFirstTime ? ($this->ema_12 + $this->ema_26) : 1);    //## eg: EMA12 + EMA26
+
+        if($isLoadingFirstTime)
         {
-            session(['firstTime' => 'false']); //### Now Toggle the value... We have loaded the Initial Batch.. So- set to False
-            $isLoadingFirstTime = 'false';
+            session(['firstTime' => 0]); //### Now Toggle the value... We have loaded the Initial Batch.. So- set to False
+            $isLoadingFirstTime = 0;
         }
 
         $coinPair = $request->coin . $request->coinPairs;
-        $dataLimitMACD = ($isLoadingFirstTime == 'true' ? (12+26) : 1);
 
         $data = $api->getKlines(['symbol' => ($coinPair), 'interval' => $request->interval, 'limit' => $dataLimitMACD]);
         if(! $data){
@@ -69,7 +73,7 @@ class TradingController extends Controller
 
         $records = json_decode($data->getBody()->getContents(), true);
 
-        if($isLoadingFirstTime=='true') {
+        if($isLoadingFirstTime) {
             return ['time' => $records[0][6], 'coinPair'=> $coinPair, 'closingPrice' => $records[0][4], 'IsFirstCall'=> $isLoadingFirstTime, 'signals' => $this->get_signals(collect($records), $request->coin)];
         }
         else {
@@ -263,9 +267,10 @@ class TradingController extends Controller
         //#### BUY Scenario: MACD Line going above Signal Line-> Blue Line Crossing the Orange line and Climbing UP!
         if($macd_value > $signal_value) {
             //### When Uptrend is starting- we will get BUY signal values (crossover) several times- take action only one- First time! and then watch for a new SELL signal!
-            if($existingOrderType=='buy' || $existingOrderType=='null') {         //### Already BUY signal is ON.. that means we have bought already... DON'T buy anymore. Watch for SELL signal!
+
+            if($existingOrderType=='buy') {         //### Already BUY signal is ON.. that means we have bought already... DON'T buy anymore. Watch for SELL signal!
                 return 'watch';
-            }else if($existingOrderType=='sell'){   //## Previously we SOLD and just now found a BUY signal which is First time.. Commit a BUY Action
+            }else if($existingOrderType=='sell'  || $existingOrderType=='null'){   //## Previously we SOLD and just now found a BUY signal which is First time.. Commit a BUY Action
                 session(['existingOrderType' => 'buy']);
                 session(['lastMACD_Buy_Action_Price' => $current_price]); //### This will be used again while Selling- to calculate Profit!
                 return 'buy';
@@ -275,9 +280,9 @@ class TradingController extends Controller
         //####  SELL Scenario: Signal Line going above MACD Line-> Orange going above Blue.
         if($macd_value < $signal_value) {
             //### When downtrend is going on- we will get SELL signal values (crossover) several times- take action only one- First time! and then watch for SELL signal!
-            if($existingOrderType=='sell' || $existingOrderType=='null') {        //### Already SELL signal is ON.. that means we have SOLD already... DON'T SELL anymore. Watch for BUY signal!
+            if($existingOrderType=='sell') {        //### Already SELL signal is ON.. that means we have SOLD already... DON'T SELL anymore. Watch for BUY signal!
                 return 'watch';
-            }else if($existingOrderType=='buy'){    //## Previously we BOUGHT and just now found a fresh SELL signal which is First time.. Commit a SELL Action
+            }else if($existingOrderType=='buy' || $existingOrderType=='null'){    //## Previously we BOUGHT and just now found a fresh SELL signal which is First time.. Commit a SELL Action
                 session(['existingOrderType' => 'sell']);
                 $lastMACD_Buy_Action_Price = session('lastMACD_Buy_Action_Price','0');
 
