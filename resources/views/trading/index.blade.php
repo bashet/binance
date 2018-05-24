@@ -10,7 +10,7 @@
         <section class="card col-xs-12">
             <div class="card-header">
                 <h3 class="card-title">Trading Indicator signal <i class="fa fa-btc" aria-hidden="true"></i>
-                    <i class="fa fa-eth" aria-hidden="true"></i></h3>
+                    <i class="fas fa-eth" aria-hidden="true"></i></h3>
 
 
             </div>
@@ -87,8 +87,8 @@
                     <h5 class="card-title">Auto trade signal <i class="fa fa-bar-chart" aria-hidden="true"></i>
                     </h5>
                 </div>
-                <table id="AutoSignalDataTable" class="table table-condensed col-md-12">
-                    <thead>
+                <table id="AutoSignalDataTable" class="table col-md-12">
+                    <thead class="thead-dark">
                     <tr>
                         <th>Time</th>
                         <th>CoinPair</th>
@@ -106,10 +106,17 @@
             </div>
 
             <div>
-                <div class="card-header">
-                    <h5 class="card-title">MACD Signal data
+                <div class="row"> {{--card-header--}}
+                    <div class="col-sm">
+                        <h5 class="card-title">MACD Signal data</h5>
+                    </div>
+                    <div class="col-sm text-right">
+                        <span class="pull-right">
                         <i class="fa fa-line-chart" aria-hidden="true"></i>
-                    </h5>
+                        Price / MACD / Signal: </span>
+                        <span id="MACD_CurrentStatus" class="pull-right"> - / - / -</span>
+                    </div>
+
                 </div>
                 {{--<table id="SignalDataTable" class="table table-condensed col-md-12">--}}
                 <table id="SignalDataTable" class="col-md-12">
