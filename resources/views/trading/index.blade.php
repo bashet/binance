@@ -9,8 +9,8 @@
     <div class="container">
         <section class="card col-xs-12">
             <div class="card-header">
-                <h3 class="card-title">Trading Indicator signal <i class="fa fa-btc" aria-hidden="true"></i>
-                    <i class="fas fa-eth" aria-hidden="true"></i></h3>
+                <h3 class="card-title">Trading Indicator signal <i class="fas fa-btc" aria-hidden="true"></i>
+                    <i class="fab fa-ethereum" aria-hidden="true"></i></h3>
 
 
             </div>
